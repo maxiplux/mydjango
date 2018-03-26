@@ -1,0 +1,41 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    container_name: database
+    volumes:
+       - dbdata:/var/lib/mysql
+    restart: always
+    ports:
+        - "3306:3309"
+    environment:
+       MYSQL_ROOT_PASSWORD: somewordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress  
+  web:
+    build: .
+    container_name: django
+    command: gunicorn composeexample.wsgi -b 0.0.0.0:8000
+    volumes:
+      - ./composeexample:/code
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    depends_on:
+      - db
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:81"
+    volumes:
+      - ./composeexample/composeexample/:/src
+      - ./config/nginx:/etc/nginx/conf.d
+    links:
+      - web
+    depends_on:
+      - web
+volumes:
+    dbdata:
