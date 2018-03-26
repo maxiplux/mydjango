@@ -22,7 +22,7 @@ services:
     ports:
       - "8000:8000"
     links:
-      - db
+      - db       
     depends_on:
       - db
   nginx:

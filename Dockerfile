@@ -25,7 +25,6 @@ RUN pip install -U pip
 RUN pip install -U gunicorn
 RUN mkdir /code
 COPY requirements.txt /code
-ADD composeexample /code
 WORKDIR /code
 RUN pip install -r requirements.txt
 CMD ["bash"]
